@@ -66,7 +66,10 @@
 
 - (BOOL)hostSupportsItem:(SUAppcastItem *)ui
 {
-	if (([ui minimumSystemVersion] == nil || [[ui minimumSystemVersion] isEqualToString:@""]) && 
+    if ([ui tags] && ![[ui tags] isSubsetOfSet:[updater allowedTags]]) // This should also work when [ui tags] is empty
+        return NO;
+
+	if (([ui minimumSystemVersion] == nil || [[ui minimumSystemVersion] isEqualToString:@""]) &&
         ([ui maximumSystemVersion] == nil || [[ui maximumSystemVersion] isEqualToString:@""])) { return YES; }
     
     BOOL minimumVersionOK = TRUE;

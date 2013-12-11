@@ -455,6 +455,18 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
 	return [[[NSString alloc] initWithData:cleanedAgent encoding:NSASCIIStringEncoding] autorelease];
 }
 
+- (void)setAllowedTags:(NSSet *)aTags
+{
+    if (tags == aTags || [tags isEqualToSet: aTags]) return;
+    [tags release];
+    tags = [aTags copy];
+}
+
+- (NSSet *)allowedTags
+{
+    return [[tags retain] autorelease];
+}
+
 - (void)setSendsSystemProfile:(BOOL)sendsSystemProfile
 {
 	[host setBool:sendsSystemProfile forUserDefaultsKey:SUSendProfileInfoKey];
@@ -531,6 +543,7 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
 	[self unregisterAsObserver];
 	[host release];
 	if (checkTimer) { [checkTimer invalidate]; [checkTimer release]; checkTimer = nil; }		// UK 2009-03-16 Timer is non-repeating, may have invalidated itself, so we had to retain it.
+    [tags release];
 	[super dealloc];
 }
 

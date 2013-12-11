@@ -114,6 +114,13 @@
 	maximumSystemVersion = [systemVersionString copy];
 }
 
+- (NSSet *)tags { return [[tags retain] autorelease]; }
+- (void)setTags:(NSSet *)theTags
+{
+    if (tags == theTags) return;
+    [tags release];
+    tags = [theTags copy];
+}
 
 - (NSURL *)infoURL	{ return [[infoURL retain] autorelease]; }	// UK 2007-08-31 (whole method)
 
@@ -220,6 +227,8 @@
 		[self setMinimumSystemVersion: [dict objectForKey:@"sparkle:minimumSystemVersion"]];
         [self setMaximumSystemVersion: [dict objectForKey:@"sparkle:maximumSystemVersion"]];
 		
+        [self setTags:[NSSet setWithArray:[[enclosure objectForKey:@"sparkle:tags"] componentsSeparatedByString:@","]]];
+        
 		NSString *shortVersionString = [enclosure objectForKey:@"sparkle:shortVersionString"];
         if (nil == shortVersionString)
             shortVersionString = [dict objectForKey:@"sparkle:shortVersionString"]; // fall back on the <item>
@@ -267,7 +276,9 @@
     [self setItemDescription:nil];
     [self setReleaseNotesURL:nil];
     [self setDSASignature:nil];
-	[self setMinimumSystemVersion: nil];
+	[self setMinimumSystemVersion:nil];
+    [self setMaximumSystemVersion:nil];
+    [self setTags:nil];
     [self setFileURL:nil];
     [self setVersionString:nil];
 	[self setDisplayVersionString:nil];
